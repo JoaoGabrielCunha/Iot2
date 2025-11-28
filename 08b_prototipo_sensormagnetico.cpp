@@ -1,8 +1,8 @@
 #include <Wire.h>
 #include <QMC5883LCompass.h>
 
-const int SDA_PIN = 15;
-const int SCL_PIN = 16;
+const int SDA_PIN = 16;
+const int SCL_PIN = 15;
 
 QMC5883LCompass compass;
 
@@ -37,3 +37,4 @@ void loop() {
 
   delay(500);
 }
+
