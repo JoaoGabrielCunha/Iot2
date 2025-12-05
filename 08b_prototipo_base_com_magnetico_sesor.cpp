@@ -120,7 +120,7 @@ void loop()
     z= compass.getZ();
 
     
-// Faz duas medidas do x,y e z e vê se o delta da maior do que 500 três vezes seguidas.
+// Faz duas medidas do x,y e z e vê se o delta da maior do que 500 três vezes seguidas, se for, você faz um ou com o outro sensor  para enviar ao mqtt.
 
 
 
