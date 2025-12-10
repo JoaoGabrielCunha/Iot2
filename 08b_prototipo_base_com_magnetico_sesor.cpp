@@ -1,4 +1,4 @@
-// AINDA NAO FUNCIONA
+
 #include <GFButton.h>
 #include <Adafruit_BME680.h>
 #include <HCSR04.h>
@@ -27,7 +27,8 @@ unsigned long instanteAnterior = 0;
 int count_vaga_vazia_distancia = 0;
 int count_vaga_cheia_distancia = 0;
 int count_vaga_cheia_mag = 0;
-int count_vaga_cheia_mag = 0;
+int count_vaga_vazia_mag = 0;
+
 
 int count_vaga_vazia_magnetico = 0;
 int count_vaga_cheia_magnetico = 0;
@@ -38,6 +39,12 @@ String Distancia_String;
 int ID_vaga = 1;
 bool Ja_mandou_vazia = false;
 bool Ja_mandou_cheia = false;
+
+//Variáveis para o vetor campo magnético
+int bx1; int by1; int bz1;
+int bx2; int by2; int bz2;
+
+int paridade_leitura_magnetica = 0;
 
 QMC5883LCompass compass;
 
@@ -80,6 +87,15 @@ void reconectarMQTT()
   }
 }
 
+int Modulo_do_inteiro(int x)
+{
+  if(x <0 )
+  {
+    x= -x;
+  }
+  return x;
+}
+
 void setup()
 {
   Serial.begin(115200);
@@ -112,18 +128,64 @@ void loop()
   unsigned long instanteAtual = millis();
   if (instanteAtual > instanteAnterior + 1000)
   {
-    int x,y,z;
-
+    
+    if (paridade_leitura_magnetica == 0)
+    {
     compass.read();
-    x= compass.getX();
-    y = compass.getY(); 
-    z= compass.getZ();
+    bx1 = compass.getX();
+    by1 = compass.getY(); 
+    bz1 = compass.getZ();
+    paridade_leitura_magnetica = 1;
+
+    Serial.println(" cm");
+    Serial.print("X: ");
+    Serial.print(bx1);
+    Serial.print("  Y: ");
+    Serial.print(by1);
+    Serial.print("  Z: ");
+    Serial.println(bz1);
+    }
+    else if(paridade_leitura_magnetica == 1)
+    {
+      compass.read();
+    bx2 = compass.getX();
+    by2 = compass.getY(); 
+    bz2 = compass.getZ();
+    paridade_leitura_magnetica = 0;
+
+    Serial.println(" cm");
+    Serial.print("X: ");
+    Serial.print(bx2);
+    Serial.print("  Y: ");
+    Serial.print(by2);
+    Serial.print("  Z: ");
+    Serial.println(bz2);
+    }
 
     
-// Faz duas medidas do x,y e z e vê se o delta da maior do que 500 três vezes seguidas, se for, você faz um ou com o outro sensor  para enviar ao mqtt.
+// Faz duas medidas do x,y e z e vê se o delta da maior do que 500 três vezes seguidas.
 
 
+    int var_bx = bx1 - bx2;
+    int var_by = by1 - by2;
+    int var_bz = bz1 - bz2;
+    
+    var_bx =  Modulo_do_inteiro(var_bx);
+    var_by =  Modulo_do_inteiro(var_by);
+    var_bz =  Modulo_do_inteiro(var_bz);
 
+   
+
+    if(var_bx > 500 || var_by > 500 || var_bz > 500 )
+    {
+      count_vaga_cheia_mag +=1;
+      count_vaga_vazia_mag = 0;
+    }
+    else
+    {
+      count_vaga_vazia_mag += 1;
+      count_vaga_cheia_mag = 0;
+    }
 
     Distancia_String = String(hc.dist());
     float Distancia_Float = Distancia_String.toFloat();
@@ -132,14 +194,7 @@ void loop()
     Serial.print(Distancia_String);  // return current distance (cm) in serial
     
      
-    Serial.println(" cm");
-    Serial.print("X: ");
-    Serial.print(x);
-    Serial.print("  Y: ");
-    Serial.print(y);
-    Serial.print("  Z: ");
-    Serial.println(z);
-
+  
 
 
 
@@ -154,7 +209,10 @@ void loop()
       count_vaga_vazia_distancia += 1;
     }
 
-    if (count_vaga_cheia_distancia > 3 && Ja_mandou_cheia == false)
+
+
+
+    if ((count_vaga_cheia_distancia > 3 || count_vaga_cheia_mag >3) && Ja_mandou_cheia == false)
     {
       rgbLedWrite(RGB_BUILTIN, 255, 0, 0);
       
@@ -167,7 +225,7 @@ void loop()
       Ja_mandou_cheia = true;
     }
 
-    if (count_vaga_vazia_distancia > 3 && Ja_mandou_vazia == false)
+    if ((count_vaga_vazia_distancia > 3 || count_vaga_cheia_mag > 3) && Ja_mandou_vazia == false)
     {
       rgbLedWrite(RGB_BUILTIN, 0, 255, 0);
       
