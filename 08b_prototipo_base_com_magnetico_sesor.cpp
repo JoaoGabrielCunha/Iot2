@@ -176,12 +176,13 @@ void loop()
 
    
 
-    if(var_bx > 500 || var_by > 500 || var_bz > 500 )
+    if((var_bx > 500 || var_by > 500 || var_bz > 500) && Ja_mandou_cheia == false )
     {
       count_vaga_cheia_mag +=1;
       count_vaga_vazia_mag = 0;
     }
-    else
+  
+    if((var_bx > 500 || var_by > 500 || var_bz > 500) && Ja_mandou_vazia == false)
     {
       count_vaga_vazia_mag += 1;
       count_vaga_cheia_mag = 0;
@@ -225,7 +226,7 @@ void loop()
       Ja_mandou_cheia = true;
     }
 
-    if ((count_vaga_vazia_distancia > 3 || count_vaga_cheia_mag > 3) && Ja_mandou_vazia == false)
+    if ((count_vaga_vazia_distancia > 3 || count_vaga_vazia_mag > 3) && Ja_mandou_vazia == false)
     {
       rgbLedWrite(RGB_BUILTIN, 0, 255, 0);
       
