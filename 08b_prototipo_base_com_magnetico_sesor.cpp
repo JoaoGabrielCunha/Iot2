@@ -38,6 +38,8 @@ int ID_vaga = 1;
 bool Ja_mandou_vazia = false;
 bool Ja_mandou_cheia = false;
 
+bool sensor_distancia_falhou = false;
+
 // variáveis do campo magnético
 int bx0 = 0;
 int by0 = 0;
@@ -99,7 +101,7 @@ void Faz_checkagem_e_envio_pelo_sensor_de_DISTANCIA()
     Distancia_String = String(hc.dist());
     Distancia_Float = Distancia_String.toFloat();
 
-    bool sensor_ditancia_falhou = (isnan(Distancia_Float)) || Distancia_Float <= 1 || Distancia_Float> 500;
+     sensor_distancia_falhou = (isnan(Distancia_Float)) || Distancia_Float <= 1 || Distancia_Float> 500;
 
     if(Distancia_Float !=0)
     {
@@ -169,14 +171,31 @@ void Faz_checkagem_e_envio_pelo_sensor_MAGNETICO()
   int delta_z;
 
   delta_x = bx0 - bx1;
-  delta_y = by1 - by0;
-  delta_z = bz1 - bz0;
+  delta_y = by0 - by1;
+  delta_z = bz0 - bz1;
 
   delta_x = modulo_inteiro(delta_x);
   delta_y = modulo_inteiro(delta_y);
   delta_z = modulo_inteiro (delta_z);
 
-  if (delta_x >300 || delta_y > 300 || delta_z > 300)
+  Serial.print("Leitura campo magnético x: ");
+  Serial.println(bx1);
+  Serial.print("Leitura campo magnético y: ");
+  Serial.println(by1);
+  Serial.print("Leitura campo magnético z: ");
+  Serial.println(bz1);
+
+  Serial.print("Variação do campo em x: ");
+  Serial.println(delta_x);
+  Serial.print("Variação do campo em y: ");
+  Serial.println(delta_y);
+  Serial.print("Variação do campo em z:  ");
+  Serial.println(delta_z);
+
+
+
+
+  if (delta_x >400 || delta_y > 400 || delta_z > 400)
   {
     bx0 = bx1;
     by0 = by1;
@@ -258,7 +277,7 @@ void loop()
 
     // Se a distância falhar vamos para a checkagem e envio magnético, falha quando a distância lida é zero.
 
-    if (Distancia_Float == 0)
+    if ( sensor_distancia_falhou == true)
     {
       Faz_checkagem_e_envio_pelo_sensor_MAGNETICO();
     }
