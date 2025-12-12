@@ -223,7 +223,7 @@ else {
 
 
 
-  if (delta_x >1000|| delta_y > 1000|| delta_z >370)
+  if (delta_x > 289|| delta_y > 49|| delta_z >349)
   {
 
     Serial.println(">>> EVENTO MAGNETICO DETECTADO (delta > limiar)");
