@@ -15,8 +15,8 @@
     {% for vaga in vagas %}
     <tr>
         <td>{{ vaga[0] }}</td>
-        <td>{{ vaga[1] | int  }}</td>
-        <td>{{ vaga[2] | int  }}</td>
+        <td>{{ vaga[1] | float  }}</td>
+        <td>{{ vaga[2] | float  }}</td>
         <td>{{ vaga[3] }}</td>
         <td>{{ "sim" if vaga[5] else "não" }}</td>
         <td>{{ vaga[4] if vaga[4] is not none else "" }}</td>

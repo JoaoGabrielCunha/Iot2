@@ -88,9 +88,82 @@ def main():
     
     # connection.commit()
 
-    cursor.execute("DELETE FROM reservas;")
+    #cursor.execute("DELETE FROM reservas;")
 
-    connection.commit()
+    #connection.commit()
+
+#     cursor.execute('''UPDATE vagas_puc
+# SET
+#   coordenada_x = CASE id
+#     WHEN 1 THEN -22.97815
+#     WHEN 2 THEN -22.97822
+#     WHEN 3 THEN -22.97829
+#     WHEN 4 THEN -22.97836
+#     WHEN 5 THEN -22.97843
+
+#     WHEN 6 THEN -22.97850
+#     WHEN 7 THEN -22.97857
+#     WHEN 8 THEN -22.97864
+#     WHEN 9 THEN -22.97871
+#     WHEN 10 THEN -22.97878
+
+#     WHEN 11 THEN -22.97815
+#     WHEN 12 THEN -22.97822
+#     WHEN 13 THEN -22.97829
+#     WHEN 14 THEN -22.97836
+#     WHEN 15 THEN -22.97843
+
+#     WHEN 16 THEN -22.97850
+#     WHEN 17 THEN -22.97857
+#     WHEN 18 THEN -22.97864
+#     WHEN 19 THEN -22.97871
+#     WHEN 20 THEN -22.97878
+
+#     WHEN 21 THEN -22.97822
+#     WHEN 22 THEN -22.97829
+#     WHEN 23 THEN -22.97836
+#     WHEN 24 THEN -22.97843
+#     WHEN 25 THEN -22.97850
+#     ELSE coordenada_x
+#   END,
+
+#   coordenada_y = CASE id
+#     WHEN 1 THEN -43.23165
+#     WHEN 2 THEN -43.23165
+#     WHEN 3 THEN -43.23165
+#     WHEN 4 THEN -43.23165
+#     WHEN 5 THEN -43.23165
+
+#     WHEN 6 THEN -43.23165
+#     WHEN 7 THEN -43.23165
+#     WHEN 8 THEN -43.23165
+#     WHEN 9 THEN -43.23165
+#     WHEN 10 THEN -43.23165
+
+#     WHEN 11 THEN -43.23140
+#     WHEN 12 THEN -43.23140
+#     WHEN 13 THEN -43.23140
+#     WHEN 14 THEN -43.23140
+#     WHEN 15 THEN -43.23140
+
+#     WHEN 16 THEN -43.23140
+#     WHEN 17 THEN -43.23140
+#     WHEN 18 THEN -43.23140
+#     WHEN 19 THEN -43.23140
+#     WHEN 20 THEN -43.23140
+
+#     WHEN 21 THEN -43.23120
+#     WHEN 22 THEN -43.23120
+#     WHEN 23 THEN -43.23120
+#     WHEN 24 THEN -43.23120
+#     WHEN 25 THEN -43.23120
+#     ELSE coordenada_y
+#   END
+# WHERE id BETWEEN 1 AND 25;
+
+# ''')
+    
+    # connection.commit()
 
     #--------------------------------------------------------------------------------------------------------------------#
 
