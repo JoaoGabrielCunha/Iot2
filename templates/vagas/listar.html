@@ -1,0 +1,37 @@
+<h1>Vagas cadastradas</h1>
+
+<table style="text-align: center;" border="5x">
+    <tr>
+        <th>ID</th>
+        <th>Coordenada x</th>
+        <th>Coordenada y</th>
+        <th>Tipo da vaga</th>
+        <th>Reservável</th>
+        <th>Matrícula</th>
+        <th>Atualizar/Excluir</th>
+        <th>Vagar</th>
+    </tr>
+
+    {% for vaga in vagas %}
+    <tr>
+        <td>{{ vaga[0] }}</td>
+        <td>{{ vaga[1] | int  }}</td>
+        <td>{{ vaga[2] | int  }}</td>
+        <td>{{ vaga[3] }}</td>
+        <td>{{ "sim" if vaga[5] else "não" }}</td>
+        <td>{{ vaga[4] if vaga[4] is not none else "" }}</td>
+        <td>
+            <a href="/atualizar/{{ vaga[0] }}">Atualizar</a> |
+            <a href="/deletar/{{ vaga[0] }}">Excluir</a>
+        </td>
+        <td>
+            <a href="/vagar/{{ vaga[0] }}">vagar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/inserir">Inserir vaga</a><br>
+
+<br>
+<a href="/">Voltar</a>

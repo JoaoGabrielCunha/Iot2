@@ -1,0 +1,26 @@
+<h1>Inserir vaga</h1>
+
+<form method="POST">
+    Matricula: <br><input id="matricula_do_estacionador" type="text" name="matricula_do_estacionador" maxlength="7" pattern="\d{1,7}" inputmode="numeric" required><br><br>
+
+    <script>
+        document.getElementById("matricula_do_estacionador").addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, "").slice(0, 7);
+        });
+    </script>
+
+    Nome Completo: <br><input type="text" name="nome_completo" maxlength="50" required><br><br>
+    <label for="cargo">Cargo:</label><br>
+        <select name="cargo" id="cargo" required>
+            <option value="">Selecione...</option>
+            <option value="professor">professor</option>
+            <option value="aluno">aluno</option>
+            <option value="funcionario">funcionário</option>
+        </select>
+<br><br>
+
+    <button type="submit">Salvar</button>
+</form>
+
+<br>
+<a href="/listar_pessoa">Voltar</a>

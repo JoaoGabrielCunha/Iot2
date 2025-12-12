@@ -1,0 +1,24 @@
+<h1>Atualizar matrícula</h1>
+
+<p>ID da vaga: {{ vaga[0] }}</p>
+
+{% if erro %}
+    <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+        {{ erro }}
+    </div>
+{% endif %}
+
+<form method="POST">
+    Nova matrícula: <br>
+    <input type="text" name="matricula_do_estacionador"  maxlength="7" pattern="\d{1,7}" inputmode="numeric" value="{{ vaga[1] if vaga[1] else '' }}">
+    <button type="submit" name="acao" value="salvar">Salvar</button>
+</form>
+
+<script>
+    document.getElementById("matricula_do_estacionador").addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "").slice(0, 7);
+    });
+</script>
+
+<br>
+<a href="/listar">Voltar</a>

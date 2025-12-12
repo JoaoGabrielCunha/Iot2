@@ -1,0 +1,35 @@
+<body style="text-align: center;">
+
+    <br><br><br><br>
+
+    <h1>LOGIN</h1>
+
+    {% if erro %}
+        <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+            {{ erro }}
+        </div>
+    {% endif %}
+
+    <!-- Formulário centralizado -->
+    <form method="POST" style="display: inline-block; text-align: left;">
+
+        <!-- Matrícula -->
+        <label for="matricula_do_login">Matrícula:</label><br>
+        <input type="text" name="matricula_do_login" id="matricula_do_login" maxlength="7" pattern="\d{1,7}" inputmode="numeric" required><br><br>
+
+        <!-- Senha -->
+        <label for="senha">Senha:</label><br>
+        <input type="password" name="senha" id="senha"><br><br>
+        
+        <div style="text-align: center;">
+            <button type="submit" name="acao" value="salvar">Salvar</button>
+        </div>
+    </form>
+
+</body>
+
+<script>
+    document.getElementById("matricula_do_login").addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "").slice(0, 7);
+    });
+</script>

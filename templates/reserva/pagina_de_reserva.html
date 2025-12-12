@@ -1,0 +1,121 @@
+<body style="text-align: center;">
+
+    <br><br>
+
+    <h1>Reserva de Vaga</h1>
+
+    <form action="/pagina_de_reserva" method="POST">
+
+         {% if erro %}
+        <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+            {{ erro }}
+        </div>
+        {% endif %}
+
+
+        <input type="hidden" name="matricula" value="{{ matricula }}">
+
+        <label for="tipo_da_vaga">Tipo de vaga que você deseja reservar:</label><br><br>
+            <select name="tipo_da_vaga" id="tipo_da_vaga" required>
+                <option value="">Selecione...</option>
+                <option value="vaga_grande" id="grande"></option>
+                <option value="vaga_pequena" id="pequena"></option>
+                <option value="vaga_elétrica" id="elétrica"></option>
+            </select>
+
+        <h4 style="color: red; font-weight: bold; margin-bottom: 10px;" id="aviso_lotação_grande"></h4>
+        <h4 style="color: red; font-weight: bold; margin-bottom: 10px;" id="aviso_lotação_pequena"></h4>
+        <h4 style="color: red; font-weight: bold; margin-bottom: 10px;" id="aviso_lotação_elétrica"></h4>
+
+        <br>
+
+        <label for="horario_chegada">Escolha o seu horário de chegada:</label>
+        <select id="horario_chegada" name="horario_chegada"></select>
+
+        <br><br>
+
+        <label for="horario_saida">Escolha o seu horário de saida:</label>
+        <select id="horario_saida" name="horario_saida"></select>
+
+        <br><br>
+
+        <button type="submit">Enviar</button>
+
+    </form>
+
+    <script>
+
+        let quantidade_de_vagas_grande = Number("{{ vagas_grande[0][3] if vagas_grande else 0}}");
+        let quantidade_de_vagas_pequena = Number("{{ vagas_pequena[0][3] if vagas_pequena else 0}}");
+        let quantidade_de_vagas_eletrica = Number("{{ vagas_eletrica[0][3] if vagas_elétrica else 0}}");
+        console.log(quantidade_de_vagas_grande);
+        console.log(quantidade_de_vagas_pequena);
+        console.log(quantidade_de_vagas_eletrica);
+
+        if (quantidade_de_vagas_grande == 0){
+            document.getElementById("grande").remove();
+            document.getElementById("aviso_lotação_grande").innerText = "sem vagas grandes!"
+        } else {
+            document.getElementById("grande").innerText = "grande"
+        }
+
+        if (quantidade_de_vagas_pequena == 0){
+            document.getElementById("pequena").remove();
+            document.getElementById("aviso_lotação_pequena").innerText = "sem vagas pequenas!"
+        } else {
+            document.getElementById("pequena").innerText = "pequena"
+        }
+
+        if (quantidade_de_vagas_eletrica == 0){
+            document.getElementById("elétrica").remove();
+            document.getElementById("aviso_lotação_elétrica").innerText = "sem vagas elétricas!"
+        } else {
+            document.getElementById("elétrica").innerText = "elétrica"
+        }
+        
+        //fazendo um relógio próprio pro dropdown só mostrar os horário possíveis
+
+        // Função que gera opções no select com intervalos de 30 min
+        function gerarHorarios(select, horaInicial = 7, horaFinal = 22) {
+            select.innerHTML = "";
+            for (let h = horaInicial; h <= horaFinal; h++) {
+                for (let m of [0, 30]) {
+                    if (h === horaFinal && m !== 0) continue;
+                    let hh = String(h).padStart(2, '0');
+                    let mm = String(m).padStart(2, '0');
+                    let value = `${hh}:${mm}`;
+                    let option = document.createElement("option");
+                    option.value = value;
+                    option.textContent = value;
+                    select.appendChild(option);
+                }
+            }
+        }
+
+        const chegada = document.getElementById("horario_chegada");
+        const saida = document.getElementById("horario_saida");
+
+        // Preenche o select de chegada primeiro
+        gerarHorarios(chegada);
+
+        // --- AQUI: Seleciona automaticamente 07:00 ---
+        chegada.value = "07:00";
+
+        // Função que filtra a saída
+        function atualizarSaida() {
+            let horaChegada = chegada.value;
+            saida.innerHTML = "";
+
+            for (let option of chegada.options) {
+                if (option.value > horaChegada) {
+                    saida.appendChild(option.cloneNode(true));
+                }
+            }
+        }
+
+        // Atualiza ao trocar
+        chegada.addEventListener("change", atualizarSaida);
+
+        // --- AQUI: Preenche a saída já na inicialização ---
+        atualizarSaida();
+    </script>

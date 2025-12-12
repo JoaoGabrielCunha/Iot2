@@ -1,0 +1,26 @@
+<h1> RESERVAS </h1>
+
+<table style="text-align: center;" border="5x">
+    <tr>
+        <th>id</th>
+        <th>matricula</th>
+        <th>id da vaga</th>
+        <th>horário de chegada</th>
+        <th>horário de saída</th>
+        <th>data da reserva</th>
+    </tr>
+
+    {% for reserva in reservas %}
+    <tr>
+        <td>{{ reserva[0] }}</td>
+        <td>{{ reserva[1] }}</td>
+        <td>{{ reserva[2] }}</td>
+        <td>{{ reserva[3] }}</td>
+        <td>{{ reserva[4] }}</td>
+        <td>{{ reserva[5] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<a href="/">Voltar</a>
