@@ -1,11 +1,7 @@
-
 #include <GFButton.h>
 #include <Adafruit_BME680.h>
 #include <HCSR04.h>
 #include <WiFi.h>
-#include <WiFiClient.h>
-#include "certificados.h"
-#include <MQTT.h>
 #include <ArduinoJson.h>
 #include <Wire.h>
 #include <QMC5883LCompass.h>
@@ -22,7 +18,7 @@ const int SCL_PIN = 15;
 
 QMC5883LCompass compass; 
 
-uint8_t broadcastAddress[] = {0x26, 0xEC, 0x4A, 0x00, 0x79, 0x64}; //26:EC:4A:00:79:64
+uint8_t broadcastAddress[] = {0x24, 0xEC, 0x4A, 0x00, 0x79, 0x64}; //24:EC:4A:00:79:64
 
 typedef struct struct_message {
   bool ocupado;
@@ -37,12 +33,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
 
-
-
 HCSR04 hc(4, 5); // initialisation class HCSR04 (trig pin , echo pin)
-
-WiFiClient conexao;
-MQTTClient mqtt(1000);
 
 unsigned long instanteAnterior = 0;
 int count_vaga_vazia = 0;
@@ -52,7 +43,7 @@ String dados_da_vaga_string;
 String Distancia_String;
 float Distancia_Float;
 int ID_vaga = 1;
-bool Ja_mandou_vazia = false;
+bool Ja_mandou_vazia = true;
 bool Ja_mandou_cheia = false;
 
 bool sensor_distancia_falhou = false;
@@ -62,46 +53,6 @@ int bx0 = 0;
 int by0 = 0;
 int bz0 = 0;
 
-
-
-void recebeuMensagem(String topico, String conteudo)
-{
-  Serial.println(topico + ": " + conteudo);
-}
-
-void reconectarWiFi()
-{
-  if (WiFi.status() != WL_CONNECTED)
-  {
-    WiFi.begin("Projeto", "2022-11-07");
-    Serial.print("Conectando ao WiFi...");
-    while (WiFi.status() != WL_CONNECTED)
-    {
-      Serial.print(".");
-      delay(1000);
-    }
-    Serial.print("conectado!\nEndereço IP: ");
-    Serial.println(WiFi.localIP());
-  }
-}
-
-void reconectarMQTT()
-{
-  if (!mqtt.connected())
-  {
-    Serial.print("Conectando MQTT...");
-    while (!mqtt.connected())
-    {
-      mqtt.connect("JG", "aula", "zowmad-tavQez");
-      Serial.print(".");
-      delay(1000);
-    }
-    Serial.println(" conectado!");
-
-    mqtt.subscribe("topico1");                // qos = 0
-    mqtt.subscribe("topico2/+/parametro", 1); // qos = 1
-  }
-}
 
 int modulo_inteiro(int x)
 {
@@ -119,6 +70,13 @@ void Faz_checkagem_e_envio_pelo_sensor_de_DISTANCIA()
     Distancia_Float = Distancia_String.toFloat();
 
      sensor_distancia_falhou = (isnan(Distancia_Float)) || Distancia_Float <= 1 || Distancia_Float> 500;
+
+    if (sensor_distancia_falhou) 
+    {
+        Serial.println("Falha no sensor de distância, usando magnético.");
+        return; // NÃO usa a distância para mudar estado
+    }
+
 
     if(Distancia_Float !=0)
     {
@@ -140,15 +98,9 @@ void Faz_checkagem_e_envio_pelo_sensor_de_DISTANCIA()
     if (count_vaga_cheia > 3 && Ja_mandou_cheia == false)
     {
       rgbLedWrite(RGB_BUILTIN, 255, 0, 0);
-      
-      dados_da_vaga["distancia"] = Distancia_Float;
-      dados_da_vaga["disponivel"] = "Nao";
-      serializeJson(dados_da_vaga, dados_da_vaga_string);
-      mqtt.publish("distancia/01", dados_da_vaga_string);
 
       myData.ocupado = true;
-
-          
+      
       Ja_mandou_vazia = false;
       Ja_mandou_cheia = true;
     }
@@ -156,18 +108,11 @@ void Faz_checkagem_e_envio_pelo_sensor_de_DISTANCIA()
     if (count_vaga_vazia > 3 && Ja_mandou_vazia == false)
     {
       rgbLedWrite(RGB_BUILTIN, 0, 255, 0);
-      
-      dados_da_vaga["distancia"] = Distancia_Float;
-      dados_da_vaga["disponivel"] = "Sim";
-      serializeJson(dados_da_vaga, dados_da_vaga_string);
-      mqtt.publish("distancia/01", dados_da_vaga_string);
 
       myData.ocupado = false;
 
-      
-     
       Ja_mandou_vazia = true;
-      Ja_mandou_cheia =false;
+      Ja_mandou_cheia = false;
     }
 
     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
@@ -186,22 +131,38 @@ void Faz_checkagem_e_envio_pelo_sensor_de_DISTANCIA()
 
 void Faz_checkagem_e_envio_pelo_sensor_MAGNETICO()
 {
-  
-  if ((Ja_mandou_cheia == false && Ja_mandou_cheia == false) || (bx0 == 0 && by0 == 0 && bz0 == 0))
+  int bx1; 
+  int by1;
+  int bz1;
+
+
+  int delta_x = 0;
+  int delta_y = 0;
+  int delta_z = 0;
+
+
+  if ((Ja_mandou_vazia == false && Ja_mandou_cheia == false) || (bx0  == 0 && by0 == 0 && bz0 == 0))
   { compass.read();
     bx0 = compass.getX();
     by0 = compass.getY();                 // Primeira leitura caso não haja leitura nenhuma ainda
     bz0 = compass.getZ();
+
+    Serial.print("Primeira Leitura campo magnético x: ");
+    Serial.println(bx0);
+    Serial.print("Primeira Leitura campo magnético y: ");
+    Serial.println(by0);
+    Serial.print("Primeira Leitura campo magnético z: ");
+    Serial.println(bz0);
   }
 
-  compass.read();
-  int bx1 = compass.getX();
-  int by1 = compass.getY();
-  int bz1 = compass.getZ();
 
-  int delta_x;
-  int delta_y;
-  int delta_z;
+else {
+  compass.read();
+  bx1 = compass.getX();
+  by1 = compass.getY();
+  bz1 = compass.getZ();
+
+
 
   delta_x = bx0 - bx1;
   delta_y = by0 - by1;
@@ -210,6 +171,7 @@ void Faz_checkagem_e_envio_pelo_sensor_MAGNETICO()
   delta_x = modulo_inteiro(delta_x);
   delta_y = modulo_inteiro(delta_y);
   delta_z = modulo_inteiro (delta_z);
+  
 
   Serial.print("Leitura campo magnético x: ");
   Serial.println(bx1);
@@ -224,46 +186,56 @@ void Faz_checkagem_e_envio_pelo_sensor_MAGNETICO()
   Serial.println(delta_y);
   Serial.print("Variação do campo em z:  ");
   Serial.println(delta_z);
+}
 
 
 
 
-  if (delta_x >400 || delta_y > 400 || delta_z > 400)
+  if (delta_x > 100|| delta_y > 49|| delta_z >349)
   {
+
+    Serial.println(">>> EVENTO MAGNETICO DETECTADO (delta > limiar)");
+    Serial.print("Flags antes - Ja_mandou_vazia: ");
+    Serial.println(Ja_mandou_vazia);
+    Serial.print("Flags antes - Ja_mandou_cheia: ");
+    Serial.println(Ja_mandou_cheia);
+
+    
     bx0 = bx1;
     by0 = by1;
     bz0 = bz1;
 
     if(Ja_mandou_cheia == false && Ja_mandou_vazia == true)
     {
+      Serial.println("Entrou no primeiro loop ");
       rgbLedWrite(RGB_BUILTIN, 255, 0, 0);
 
-      dados_da_vaga["distancia"] = Distancia_Float;
-      dados_da_vaga["disponivel"] = "Nao";
-      serializeJson(dados_da_vaga, dados_da_vaga_string);
-      mqtt.publish("distancia/01", dados_da_vaga_string);
-      
+      myData.ocupado = false;
 
-      Ja_mandou_vazia == false;
+      Ja_mandou_vazia = false;
       Ja_mandou_cheia = true;
 
     }
-
-    if (Ja_mandou_cheia == true && Ja_mandou_vazia == false)
+    
+    else if (Ja_mandou_cheia == true && Ja_mandou_vazia == false)
     {
       rgbLedWrite(RGB_BUILTIN, 0, 255, 0);
+      Serial.println("Entrou no segundo loop");
 
-      dados_da_vaga["distancia"] = Distancia_Float;
-      dados_da_vaga["disponivel"] = "Sim";
-      serializeJson(dados_da_vaga, dados_da_vaga_string);
-      mqtt.publish("distancia/01", dados_da_vaga_string);
+      myData.ocupado = true;
      
       Ja_mandou_vazia = true;
       Ja_mandou_cheia =false;
-
-
     }
 
+  }
+  esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
+      
+  if (result == ESP_OK) {
+    Serial.println("Sent with success");
+  }
+  else {
+    Serial.println("Error sending the data");
   }
 }
 
@@ -274,17 +246,11 @@ void setup()
   delay(300);
   Serial.println("Olá mundo!!!");
 
-  WiFi.mode(WIFI_STA);
-
   rgbLedWrite(RGB_BUILTIN, 0, 255, 0);
 
-  reconectarWiFi();
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(); 
 
-  mqtt.begin("mqtt.janks.dev.br", 1883, conexao);
-  mqtt.onMessage(recebeuMensagem);
-  mqtt.setKeepAlive(10);
-  mqtt.setWill("tópico da desconexão", "conteúdo");
-  reconectarMQTT();
   dados_da_vaga["disponivel"] = "Sim";
   dados_da_vaga["idvaga"] = ID_vaga;
 
@@ -304,6 +270,8 @@ void setup()
     return;
   }
 
+  Ja_mandou_vazia = true;
+  Ja_mandou_cheia = false;
 
   // Inicializa I2C nos pinos escolhidos
   Wire.begin(SDA_PIN, SCL_PIN);
@@ -337,7 +305,4 @@ void loop()
   }
 
   
-  reconectarWiFi();
-  reconectarMQTT();
-  mqtt.loop();
 }
