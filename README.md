@@ -92,7 +92,9 @@ O circuito principal foi desenhado no **EasyEDA** e inclui:
 - ESP32.
 - Sensor de distância **HC-SR04** (com divisor de tensão no pino ECHO, se necessário).
 - Sensor magnético **HMC5883L / GY-271** conectado via I²C (pinos SDA/SCL).
-- Conectores/pads de alimentação e programação.
+- Sensor de movimento **HC-SR501**
+- Modulo **LoraWan** para comunicação com o servidor.
+- **Display ePaper**.
 
 ![Esquemático da placa do sensor](docs/Schematic_Placa_Sensor.png)
 ![Esquemático da placa do display](docs/Schematic_Placa_QR_CODE.png)
@@ -100,3 +102,11 @@ O circuito principal foi desenhado no **EasyEDA** e inclui:
 ![Vista traseira da placa do display](docs/Foto_Verso_Placa_QRCODE.png)
 ![Vista frontal da placa do sensor](docs/Foto_Frente_Placa_Sensor.png)
 ![Vista traseira da placa do sensor](docs/Foto_Verso_Placa_Sensor.png)
+
+---
+
+## 4. Dashboard das vagas
+
+Visualização de disponibiliade e tipo de vagas.
+
+![Dashboard](docs/Imagem_Dashboards.jpg)
