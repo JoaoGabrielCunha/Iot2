@@ -95,4 +95,4 @@ O circuito principal foi desenhado no **EasyEDA** e inclui:
 - Conectores/pads de alimentação e programação.
 
 ```md
-![Esquemático da placa da vaga](docs/esquematico_vaga.png)
+![Esquemático da placa da vaga](docs/Foto_Frente_Placa_QRCODE.png)
