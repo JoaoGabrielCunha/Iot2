@@ -94,5 +94,4 @@ O circuito principal foi desenhado no **EasyEDA** e inclui:
 - Sensor magnético **HMC5883L / GY-271** conectado via I²C (pinos SDA/SCL).
 - Conectores/pads de alimentação e programação.
 
-```md
 ![Esquemático da placa da vaga](docs/Foto_Frente_Placa_QRCODE.png)
