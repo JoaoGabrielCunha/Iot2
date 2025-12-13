@@ -98,31 +98,31 @@ O circuito principal foi desenhado no **EasyEDA** e inclui:
 <table>
   <tr>
     <td align="center">
-      <img src="docs/Schematic_Placa_Sensor.png" width="400"><br>
+      <img src="docs/Schematic_Placa_Sensor.png" style="width:380px; height:260px; object-fit: cover;"><br>
       <b>Esquemático da placa do sensor</b>
     </td>
     <td align="center">
-      <img src="docs/Schematic_Placa_QR_CODE.png" width="400"><br>
+      <img src="docs/Schematic_Placa_QR_CODE.png" style="width:380px; height:260px; object-fit: cover;"><br>
       <b>Esquemático da placa do display</b>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="docs/Foto_Frente_Placa_QRCODE.png" width="400"><br>
+      <img src="docs/Foto_Frente_Placa_QRCODE.png" style="width:380px; height:260px; object-fit: cover;"><br>
       <b>Vista frontal da placa do display</b>
     </td>
     <td align="center">
-      <img src="docs/Foto_Verso_Placa_QRCODE.png" width="400"><br>
+      <img src="docs/Foto_Verso_Placa_QRCODE.png" style="width:380px; height:260px; object-fit: cover;"><br>
       <b>Vista traseira da placa do display</b>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="docs/Foto_Frente_Placa_Sensor.png" width="400"><br>
+      <img src="docs/Foto_Frente_Placa_Sensor.png" style="width:380px; height:260px; object-fit: cover;"><br>
       <b>Vista frontal da placa do sensor</b>
     </td>
     <td align="center">
-      <img src="docs/Foto_Verso_Placa_Sensor.png" width="400"><br>
+      <img src="docs/Foto_Verso_Placa_Sensor.png" style="width:380px; height:260px; object-fit: cover;"><br>
       <b>Vista traseira da placa do sensor</b>
     </td>
   </tr>
