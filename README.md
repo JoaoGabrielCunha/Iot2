@@ -95,12 +95,38 @@ O circuito principal foi desenhado no **EasyEDA** e inclui:
 - Modulo **LoraWan** para comunicação com o servidor.
 - **Display ePaper**.
 
-![Esquemático da placa do sensor](docs/Schematic_Placa_Sensor.png)
-![Esquemático da placa do display](docs/Schematic_Placa_QR_CODE.png)
-![Vista frontal da placa do display](docs/Foto_Frente_Placa_QRCODE.png)
-![Vista traseira da placa do display](docs/Foto_Verso_Placa_QRCODE.png)
-![Vista frontal da placa do sensor](docs/Foto_Frente_Placa_Sensor.png)
-![Vista traseira da placa do sensor](docs/Foto_Verso_Placa_Sensor.png)
+<table>
+  <tr>
+    <td align="center">
+      <img src="docs/Schematic_Placa_Sensor.png" width="400"><br>
+      <b>Esquemático da placa do sensor</b>
+    </td>
+    <td align="center">
+      <img src="docs/Schematic_Placa_QR_CODE.png" width="400"><br>
+      <b>Esquemático da placa do display</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="docs/Foto_Frente_Placa_QRCODE.png" width="400"><br>
+      <b>Vista frontal da placa do display</b>
+    </td>
+    <td align="center">
+      <img src="docs/Foto_Verso_Placa_QRCODE.png" width="400"><br>
+      <b>Vista traseira da placa do display</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="docs/Foto_Frente_Placa_Sensor.png" width="400"><br>
+      <b>Vista frontal da placa do sensor</b>
+    </td>
+    <td align="center">
+      <img src="docs/Foto_Verso_Placa_Sensor.png" width="400"><br>
+      <b>Vista traseira da placa do sensor</b>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -108,4 +134,6 @@ O circuito principal foi desenhado no **EasyEDA** e inclui:
 
 Visualização de disponibiliade e tipo de vagas.
 
-![Dashboard](docs/Imagem_Dashboards.jpg)
+<p align="center">
+  <img src="docs/Imagem_Dashboards.jpg" width="800">
+</p>
