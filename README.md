@@ -44,23 +44,23 @@ A arquitetura é dividida em quatro grandes blocos:
      - HC-SR04 (distância).
      - HMC5883L (campo magnético, redundância).
      - Lógica de decisão: se o ultrassom falhar (leituras inválidas ou fora da faixa), o sistema passa a usar apenas o sensor magnético para detectar entrada/saída pela variação do campo.
-     - Publica mensagens MQTT com o estado da vaga (`disponivel`, `distancia`, `id_vaga`, etc.).
+     - Usa **ESP-NOW** para enviar o estado da vaga (Vago/Ocupado) para o ESP32 que possui antena LoraWan.
    - ESP32 com leitor de QR Code:
      - Lê o QR Code do usuário.
-     - Usa **ESP-NOW** para enviar o identificador do usuário e da vaga para o ESP da vaga.
+     - Envia via LoraWan o QR Code e recebe a matricula do usuário.
+     - Usa **ESP-NOW** para receber o estado da vaga, envia via LoraWan e altera no banco de dados e dashboard a ocupação.
 
 2. **Camada de Comunicação**
    - **ESP-NOW** para comunicação direta e de baixa latência entre os dois ESP32.
-   - **MQTT** para comunicação dos ESP32 com o backend:
-     - Tópicos de telemetria das vagas (por exemplo: `distancia/01`, `vaga/01/status`, etc.).
-     - Opcionalmente, tópicos de comando (reserva, liberação, etc.).
+   - **LoraWan** para enviar e receber informações ao ESP32:
+     - Lora publica em um topico de UPLINK no **MQTT** que passa num fluxo do **Node-Red** que publica o resultado em um topico de DOWNLINK, que é lido pelo Lora e envia a resposta para o ESP32.
 
 3. **Backend (Node-RED + PostgreSQL + Grafana)**
    - **Node-RED**:
      - Conectado ao broker MQTT.
-     - Processa mensagens recebidas dos ESP32.
-     - Faz validações e transforma os dados.
+     - Processa mensagens recebidas do topico de UPLINK.
      - Insere/atualiza registros no banco **PostgreSQL** (ocupação de vaga, usuário associado, timestamps, etc.).
+     - Retorna um valor, quando necessário, em um topico de DOWNLINK.
    - **PostgreSQL**:
      - Banco relacional para:
        - Tabela de vagas.
@@ -70,9 +70,8 @@ A arquitetura é dividida em quatro grandes blocos:
    - **Grafana**:
      - Conectado ao PostgreSQL.
      - Exibe dashboards com:
-       - Histórico de ocupação das vagas.
-       - Estatísticas de uso.
-       - Gráficos de sensores (distância, campo magnético, etc.).
+       - Grafico das vagas em tempo real.
+       - Contador de vagas livres e ocupadas
 
 4. **Aplicativo Web**
    - Interface para:
@@ -81,7 +80,7 @@ A arquitetura é dividida em quatro grandes blocos:
      - Consulta a históricos e gráficos.
    - Comunicação com o sistema:
      - Lê e grava dados diretamente no **PostgreSQL**.
-     - As alterações no banco são refletidas no Node-RED e nos ESP32 conforme a lógica de integração definida (por exemplo, Node-RED pode ler mudanças no banco e enviar comandos via MQTT).
+     - As alterações no banco são refletidas no Node-RED e nos ESP32 conforme a lógica de integração definida.
 
 ---
 
