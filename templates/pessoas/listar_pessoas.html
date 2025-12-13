@@ -1,22 +1,105 @@
-<h1>Pessoas cadastradas</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pessoas cadastradas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-color: #333;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #EEE;
+        }
 
-<table style="text-align: center;" border="5x">
-    <tr>
-        <th>Matricula</th>
-        <th>Nome</th>
-        <th>Cargo</th>
-    </tr>
+        h1 {
+            margin-bottom: 24px;
+        }
 
-    {% for pessoa in pessoas %}
-    <tr>
-        <td>{{ pessoa[0] }}</td>
-        <td>{{ pessoa[1] }}</td>
-        <td>{{ pessoa[2] }}</td>
-    </tr>
-    {% endfor %}
-</table>
+        table {
+            border-collapse: collapse;
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            min-width: 700px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
 
-<a href="/inserir_pessoa">Inserir pessoa</a><br>
+        th, td {
+            padding: 14px 18px;
+            text-align: center;
+        }
 
-<br>
-<a href="/">Voltar</a>
+        th {
+            background: #3a74c7;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #242424;
+        }
+
+        tr:hover {
+            background: #1f1f1f;
+        }
+
+        .botoes {
+            margin-top: 30px;
+            display: flex;
+            gap: 16px;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+            background: #3a74c7;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: 0.2s ease;
+            min-width: 160px;
+            text-align: center;
+        }
+
+        a:hover {
+            background: #255394;
+        }
+
+        .voltar {
+            background: #555;
+        }
+
+        .voltar:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pessoas cadastradas</h1>
+
+    <table>
+        <tr>
+            <th>Matrícula</th>
+            <th>Nome</th>
+            <th>Cargo</th>
+        </tr>
+
+        {% for pessoa in pessoas %}
+        <tr>
+            <td>{{ pessoa[0] }}</td>
+            <td>{{ pessoa[1] }}</td>
+            <td>{{ pessoa[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="botoes">
+        <a href="/" class="voltar">Voltar</a>
+        <a href="/inserir_pessoa">Inserir pessoa</a>
+    </div>
+</body>
+</html>

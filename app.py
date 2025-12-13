@@ -36,7 +36,7 @@ def listar_pessoas():
 def listar_reservas():
     conn = conecta()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM reservas ORDER BY data_reserva, horario_chegada DESC")
+    cursor.execute("SELECT * FROM reservas ORDER BY data_reserva DESC, horario_chegada DESC")
 
     # TABLE reservas
     # id - PRIMARY KEY,
@@ -197,7 +197,7 @@ def pagina_inicial_login():
         if ja_tem_reserva:
             
             cursor.execute("""
-                SELECT horario_chegada, horario_saida, data_reserva
+                SELECT horario_chegada, horario_saida, data_reserva, matricula, id
                 FROM reservas
                 WHERE matricula = %s
                 AND 
@@ -212,8 +212,13 @@ def pagina_inicial_login():
                 horario_chegada = reserva[0]
                 horario_saida   = reserva[1]
                 data_reserva    = reserva[2]
+                matricula       = reserva[3]
+                id              = reserva[4]
+                print('\n\n\n\n\n\n\n\n') 
+                print(reserva) 
+                print("\n\n\n\n\n\n\n")
 
-                responde = render_template("reserva/nao_pode_reservar.html", chegada=horario_chegada, saida=horario_saida, data=data_reserva)
+                responde = render_template("reserva/nao_pode_reservar.html", chegada=horario_chegada, saida=horario_saida, data=data_reserva, matricula=matricula, id=id)
 
                 cursor.close()
                 conn.close()
@@ -276,6 +281,7 @@ def reservar():
                 WHERE r.vaga_id = v.id
                 AND r.horario_chegada < %s
                 AND r.horario_saida > %s
+                AND r.data_reserva = CURRENT_DATE
           )
         ORDER BY v.id
         LIMIT 1;

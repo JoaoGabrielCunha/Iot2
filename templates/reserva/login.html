@@ -1,35 +1,92 @@
-<body style="text-align: center;">
-
-    <br><br><br><br>
-
+<body>
     <h1>LOGIN</h1>
 
     {% if erro %}
-        <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+        <div class="erro">
             {{ erro }}
         </div>
     {% endif %}
 
-    <!-- Formulário centralizado -->
-    <form method="POST" style="display: inline-block; text-align: left;">
+    <form method="POST" class="login-box">
+        <label for="matricula_do_login">Matrícula</label>
+        <input type="text" name="matricula_do_login" id="matricula_do_login"
+               maxlength="7" pattern="\d{1,7}" inputmode="numeric" required>
 
-        <!-- Matrícula -->
-        <label for="matricula_do_login">Matrícula:</label><br>
-        <input type="text" name="matricula_do_login" id="matricula_do_login" maxlength="7" pattern="\d{1,7}" inputmode="numeric" required><br><br>
+        <label for="senha">Senha</label>
+        <input type="password" name="senha" id="senha">
 
-        <!-- Senha -->
-        <label for="senha">Senha:</label><br>
-        <input type="password" name="senha" id="senha"><br><br>
-        
-        <div style="text-align: center;">
-            <button type="submit" name="acao" value="salvar">Salvar</button>
-        </div>
+        <button type="submit">Entrar</button>
     </form>
-
 </body>
 
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: #EEE;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 80px; /* controla o quanto sobe */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.login-box {
+    background: #2a2a2a;
+    padding: 30px;
+    border-radius: 10px;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-box label {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.login-box input {
+    background: #444;
+    border: 1px solid #555;
+    color: #EEE;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.login-box input:focus {
+    outline: none;
+    border-color: #3a74c7;
+}
+
+.login-box button {
+    background: #3a74c7;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.login-box button:hover {
+    background: #255394;
+}
+
+.erro {
+    color: #ff6b6b;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+</style>
+
 <script>
-    document.getElementById("matricula_do_login").addEventListener("input", function () {
-        this.value = this.value.replace(/\D/g, "").slice(0, 7);
-    });
+document.getElementById("matricula_do_login").addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, "").slice(0, 7);
+});
 </script>

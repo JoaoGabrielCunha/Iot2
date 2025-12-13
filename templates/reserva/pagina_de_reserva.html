@@ -1,111 +1,164 @@
-<body style="text-align: center;">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reserva de Vaga</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #EEE;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    <br><br>
+        h1 {
+            margin-bottom: 24px;
+        }
 
+        form {
+            background: #2a2a2a;
+            padding: 30px 36px;
+            border-radius: 12px;
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        label {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 6px;
+            align-self: flex-start;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            background: #1f1f1f;
+            color: #EEE;
+            margin-bottom: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border: 2px solid #3a74c7;
+        }
+
+        button {
+            background: #3a74c7;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #255394;
+        }
+
+        .aviso {
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
     <h1>Reserva de Vaga</h1>
 
     <form action="/pagina_de_reserva" method="POST">
 
-         {% if erro %}
-        <div style="color: red; font-weight: bold; margin-bottom: 10px;">
-            {{ erro }}
-        </div>
+        {% if erro %}
+        <div class="aviso" style="display:block">{{ erro }}</div>
         {% endif %}
-
 
         <input type="hidden" name="matricula" value="{{ matricula }}">
 
-        <label for="tipo_da_vaga">Tipo de vaga que você deseja reservar:</label><br><br>
-            <select name="tipo_da_vaga" id="tipo_da_vaga" required>
-                <option value="">Selecione...</option>
-                <option value="vaga_grande" id="grande"></option>
-                <option value="vaga_pequena" id="pequena"></option>
-                <option value="vaga_elétrica" id="elétrica"></option>
-            </select>
+        <label for="tipo_da_vaga">Tipo de vaga que você deseja reservar:</label>
+        <select name="tipo_da_vaga" id="tipo_da_vaga" required>
+            <option value="">Selecione...</option>
+            <option value="vaga_grande" id="grande">Grande</option>
+            <option value="vaga_pequena" id="pequena">Pequena</option>
+            <option value="vaga_eletrica" id="eletrica">Elétrica</option>
+        </select>
 
-        <h4 style="color: red; font-weight: bold; margin-bottom: 10px;" id="aviso_lotação_grande"></h4>
-        <h4 style="color: red; font-weight: bold; margin-bottom: 10px;" id="aviso_lotação_pequena"></h4>
-        <h4 style="color: red; font-weight: bold; margin-bottom: 10px;" id="aviso_lotação_elétrica"></h4>
-
-        <br>
+        <div class="aviso" id="aviso_lotacao_grande"></div>
+        <div class="aviso" id="aviso_lotacao_pequena"></div>
+        <div class="aviso" id="aviso_lotacao_eletrica"></div>
 
         <label for="horario_chegada">Escolha o seu horário de chegada:</label>
         <select id="horario_chegada" name="horario_chegada"></select>
 
-        <br><br>
-
-        <label for="horario_saida">Escolha o seu horário de saida:</label>
+        <label for="horario_saida">Escolha o seu horário de saída:</label>
         <select id="horario_saida" name="horario_saida"></select>
 
-        <br><br>
-
         <button type="submit">Enviar</button>
-
     </form>
 
     <script>
+        let vagas = {
+            grande: Number("{{ vagas_grande[0][3] if vagas_grande else 0}}"),
+            pequena: Number("{{ vagas_pequena[0][3] if vagas_pequena else 0}}"),
+            eletrica: Number("{{ vagas_eletrica[0][3] if vagas_eletrica else 0}}")
+        };
 
-        let quantidade_de_vagas_grande = Number("{{ vagas_grande[0][3] if vagas_grande else 0}}");
-        let quantidade_de_vagas_pequena = Number("{{ vagas_pequena[0][3] if vagas_pequena else 0}}");
-        let quantidade_de_vagas_eletrica = Number("{{ vagas_eletrica[0][3] if vagas_elétrica else 0}}");
-        console.log(quantidade_de_vagas_grande);
-        console.log(quantidade_de_vagas_pequena);
-        console.log(quantidade_de_vagas_eletrica);
-
-        if (quantidade_de_vagas_grande == 0){
-            document.getElementById("grande").remove();
-            document.getElementById("aviso_lotação_grande").innerText = "sem vagas grandes!"
-        } else {
-            document.getElementById("grande").innerText = "grande"
+        function atualizarVagas(tipo, idOption, idAviso, texto) {
+            if (vagas[tipo] === 0) {
+                document.getElementById(idOption).remove();
+                let aviso = document.getElementById(idAviso);
+                aviso.innerText = texto;
+                aviso.style.display = "block";
+            }
         }
 
-        if (quantidade_de_vagas_pequena == 0){
-            document.getElementById("pequena").remove();
-            document.getElementById("aviso_lotação_pequena").innerText = "sem vagas pequenas!"
-        } else {
-            document.getElementById("pequena").innerText = "pequena"
-        }
+        atualizarVagas('grande', 'grande', 'aviso_lotacao_grande', 'Sem vagas grandes!');
+        atualizarVagas('pequena', 'pequena', 'aviso_lotacao_pequena', 'Sem vagas pequenas!');
+        atualizarVagas('eletrica', 'eletrica', 'aviso_lotacao_eletrica', 'Sem vagas elétricas!');
 
-        if (quantidade_de_vagas_eletrica == 0){
-            document.getElementById("elétrica").remove();
-            document.getElementById("aviso_lotação_elétrica").innerText = "sem vagas elétricas!"
-        } else {
-            document.getElementById("elétrica").innerText = "elétrica"
-        }
-        
-        //fazendo um relógio próprio pro dropdown só mostrar os horário possíveis
-
-        // Função que gera opções no select com intervalos de 30 min
-        function gerarHorarios(select, horaInicial = 7, horaFinal = 22) {
-            select.innerHTML = "";
+        function gerarHorarios(select, horaInicial = 7, horaFinal = 23) { 
+            select.innerHTML = '';
             for (let h = horaInicial; h <= horaFinal; h++) {
-                for (let m of [0, 30]) {
+                for (let m of [0,30]) {
                     if (h === horaFinal && m !== 0) continue;
-                    let hh = String(h).padStart(2, '0');
-                    let mm = String(m).padStart(2, '0');
-                    let value = `${hh}:${mm}`;
-                    let option = document.createElement("option");
-                    option.value = value;
-                    option.textContent = value;
+                    let hh = String(h).padStart(2,'0');
+                    let mm = String(m).padStart(2,'0');
+                    let option = document.createElement('option');
+                    option.value = `${hh}:${mm}`;
+                    option.textContent = `${hh}:${mm}`;
                     select.appendChild(option);
                 }
             }
         }
 
-        const chegada = document.getElementById("horario_chegada");
-        const saida = document.getElementById("horario_saida");
+        const chegada = document.getElementById('horario_chegada');
+        const saida = document.getElementById('horario_saida');
 
-        // Preenche o select de chegada primeiro
         gerarHorarios(chegada);
+        chegada.value = '07:00';
 
-        // --- AQUI: Seleciona automaticamente 07:00 ---
-        chegada.value = "07:00";
-
-        // Função que filtra a saída
         function atualizarSaida() {
             let horaChegada = chegada.value;
-            saida.innerHTML = "";
-
+            saida.innerHTML = '';
             for (let option of chegada.options) {
                 if (option.value > horaChegada) {
                     saida.appendChild(option.cloneNode(true));
@@ -113,9 +166,8 @@
             }
         }
 
-        // Atualiza ao trocar
-        chegada.addEventListener("change", atualizarSaida);
-
-        // --- AQUI: Preenche a saída já na inicialização ---
+        chegada.addEventListener('change', atualizarSaida);
         atualizarSaida();
     </script>
+</body>
+</html>

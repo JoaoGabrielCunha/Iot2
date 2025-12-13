@@ -1,12 +1,15 @@
-<body style="text-align: center;">
+<body style="text-align: center; font-family: Arial, sans-serif; background-color: #333; color: #EEE; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px; box-sizing: border-box;">
+    <h1 style="font-size: 60px; margin-bottom: 20px;">Você já fez uma reserva!</h1>
+    <h3 style="margin-bottom: 40px;">Reserva para o dia {{ data }} das {{ chegada }} às {{ saida }}</h3>
 
-<br><br><br><br><br><br><br>
+    <!-- Botão de cancelar a reserva -->
+<form action="/deletar_reserva/{{ id }}" method="POST" style="width: 300px; display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
+    <input type="hidden" name="matricula" value="{{ matricula }}">
+    <button type="submit" style="background: #c73a3a; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px; transition: 0.2s ease;">
+        Cancelar Reserva
+    </button>
+</form>
 
-<h1 style="font-size: 60px;"> Você já fez uma reserva! </h1>
-<h3> Reserva para o dia {{ data }} das {{ chegada }} às {{ saida }} </h3>
 
-<!--TODO: botão de cancelar a reserva-->
-
-
-
+    <a href="/" style="color: white; background: #3a74c7; padding: 10px 16px; border-radius: 8px; text-decoration: none; display: inline-block; width: 200px; text-align: center; transition: 0.2s ease;">Voltar</a>
 </body>

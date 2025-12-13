@@ -1,26 +1,100 @@
-<h1> RESERVAS </h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reservas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-color: #333;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #EEE;
+        }
 
-<table style="text-align: center;" border="5x">
-    <tr>
-        <th>id</th>
-        <th>matricula</th>
-        <th>id da vaga</th>
-        <th>horário de chegada</th>
-        <th>horário de saída</th>
-        <th>data da reserva</th>
-    </tr>
+        h1 {
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+        }
 
-    {% for reserva in reservas %}
-    <tr>
-        <td>{{ reserva[0] }}</td>
-        <td>{{ reserva[1] }}</td>
-        <td>{{ reserva[2] }}</td>
-        <td>{{ reserva[3] }}</td>
-        <td>{{ reserva[4] }}</td>
-        <td>{{ reserva[5] }}</td>
-    </tr>
-    {% endfor %}
-</table>
+        table {
+            border-collapse: collapse;
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            min-width: 900px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
 
-<br>
-<a href="/">Voltar</a>
+        th, td {
+            padding: 14px 18px;
+            text-align: center;
+        }
+
+        th {
+            background: #3a74c7;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #242424;
+        }
+
+        tr:hover {
+            background: #1f1f1f;
+        }
+
+        .botoes {
+            margin-top: 30px;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+            background: #555;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: 0.2s ease;
+            min-width: 160px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        a:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>RESERVAS</h1>
+
+    <table>
+        <tr>
+            <th>Matrícula</th>
+            <th>ID da vaga</th>
+            <th>Horário de chegada</th>
+            <th>Horário de saída</th>
+            <th>Data da reserva</th>
+        </tr>
+
+        {% for reserva in reservas %}
+        <tr>
+            <td>{{ reserva[1] }}</td>
+            <td>{{ reserva[2] }}</td>
+            <td>{{ reserva[3] }}</td>
+            <td>{{ reserva[4] }}</td>
+            <td>{{ reserva[5].strftime('%d/%m/%Y') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="botoes">
+        <a href="/">Voltar</a>
+    </div>
+</body>
+</html>

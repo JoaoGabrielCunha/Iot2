@@ -1,37 +1,130 @@
-<h1>Vagas cadastradas</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vagas cadastradas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-color: #333;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #EEE;
+        }
 
-<table style="text-align: center;" border="5x">
-    <tr>
-        <th>ID</th>
-        <th>Coordenada x</th>
-        <th>Coordenada y</th>
-        <th>Tipo da vaga</th>
-        <th>Reservável</th>
-        <th>Matrícula</th>
-        <th>Atualizar/Excluir</th>
-        <th>Vagar</th>
-    </tr>
+        h1 {
+            margin-bottom: 24px;
+        }
 
-    {% for vaga in vagas %}
-    <tr>
-        <td>{{ vaga[0] }}</td>
-        <td>{{ vaga[1] | float  }}</td>
-        <td>{{ vaga[2] | float  }}</td>
-        <td>{{ vaga[3] }}</td>
-        <td>{{ "sim" if vaga[5] else "não" }}</td>
-        <td>{{ vaga[4] if vaga[4] is not none else "" }}</td>
-        <td>
-            <a href="/atualizar/{{ vaga[0] }}">Atualizar</a> |
-            <a href="/deletar/{{ vaga[0] }}">Excluir</a>
-        </td>
-        <td>
-            <a href="/vagar/{{ vaga[0] }}">vagar</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+        table {
+            border-collapse: collapse;
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            min-width: 900px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
 
-<a href="/inserir">Inserir vaga</a><br>
+        th, td {
+            padding: 12px 16px;
+            text-align: center;
+        }
 
-<br>
-<a href="/">Voltar</a>
+        th {
+            background: #3a74c7;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #242424;
+        }
+
+        tr:hover {
+            background: #1f1f1f;
+        }
+
+        a {
+            color: white;
+            background: #3a74c7;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: 0.2s ease;
+            font-size: 14px;
+        }
+
+        a:hover {
+            background: #255394;
+        }
+
+        .acoes a {
+            margin: 0 4px;
+        }
+
+        .botoes {
+            margin-top: 30px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .botoes a {
+            min-width: 160px;
+            text-align: center;
+            font-size: 16px;
+            padding: 10px 16px;
+        }
+
+        .voltar {
+            background: #555;
+        }
+
+        .voltar:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Vagas cadastradas</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Coordenada X</th>
+            <th>Coordenada Y</th>
+            <th>Tipo da vaga</th>
+            <th>Reservável</th>
+            <th>Matrícula</th>
+            <th>Atualizar / Excluir</th>
+            <th>Vagar</th>
+        </tr>
+
+        {% for vaga in vagas %}
+        <tr>
+            <td>{{ vaga[0] }}</td>
+            <td>{{ vaga[1] | float }}</td>
+            <td>{{ vaga[2] | float }}</td>
+            <td>{{ vaga[3] }}</td>
+            <td>{{ "sim" if vaga[5] else "não" }}</td>
+            <td>{{ vaga[4] if vaga[4] is not none else "" }}</td>
+            <td class="acoes">
+                <a href="/atualizar/{{ vaga[0] }}">Atualizar</a>
+                <a href="/deletar/{{ vaga[0] }}">Excluir</a>
+            </td>
+            <td>
+                <a href="/vagar/{{ vaga[0] }}">Vagar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="botoes">
+        <a href="/" class="voltar">Voltar</a>
+        <a href="/inserir">Inserir vaga</a>
+    </div>
+</body>
+</html>

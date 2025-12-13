@@ -1,24 +1,134 @@
-<h1>Atualizar matrícula</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atualizar matrícula</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-color: #333;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #EEE;
+        }
 
-<p>ID da vaga: {{ vaga[0] }}</p>
+        h1 {
+            margin-bottom: 12px;
+        }
 
-{% if erro %}
-    <div style="color: red; font-weight: bold; margin-bottom: 10px;">
-        {{ erro }}
-    </div>
-{% endif %}
+        .info {
+            color: #bbb;
+            margin-bottom: 20px;
+        }
 
-<form method="POST">
-    Nova matrícula: <br>
-    <input type="text" name="matricula_do_estacionador"  maxlength="7" pattern="\d{1,7}" inputmode="numeric" value="{{ vaga[1] if vaga[1] else '' }}">
-    <button type="submit" name="acao" value="salvar">Salvar</button>
-</form>
+        .erro {
+            background: #4a1f1f;
+            color: #ffb3b3;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-weight: bold;
+            width: 280px;
+            text-align: center;
+        }
 
-<script>
-    document.getElementById("matricula_do_estacionador").addEventListener("input", function () {
-        this.value = this.value.replace(/\D/g, "").slice(0, 7);
-    });
-</script>
+        form {
+            background: #2a2a2a;
+            padding: 32px 36px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            width: 280px;
+        }
 
-<br>
-<a href="/listar">Voltar</a>
+        label {
+            font-size: 14px;
+            color: #ccc;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            background: #1f1f1f;
+            color: #EEE;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            box-shadow: 0 0 0 2px #3a74c7;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #3a74c7;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            background: #255394;
+        }
+
+        .voltar {
+            margin-top: 24px;
+            text-decoration: none;
+            color: white;
+            background: #555;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: 0.2s ease;
+        }
+
+        .voltar:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Atualizar matrícula</h1>
+
+    <p class="info">ID da vaga: {{ vaga[0] }}</p>
+
+    {% if erro %}
+        <div class="erro">{{ erro }}</div>
+    {% endif %}
+
+    <form method="POST">
+        <label for="matricula_do_estacionador">Nova matrícula</label>
+        <input 
+            id="matricula_do_estacionador"
+            type="text" 
+            name="matricula_do_estacionador"
+            maxlength="7" 
+            pattern="\d{1,7}" 
+            inputmode="numeric" 
+            value="{{ vaga[1] if vaga[1] else '' }}">
+
+        <button type="submit" name="acao" value="salvar">Salvar</button>
+    </form>
+
+    <a href="/listar" class="voltar">Voltar</a>
+
+    <script>
+        document.getElementById("matricula_do_estacionador").addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, "").slice(0, 7);
+        });
+    </script>
+</body>
+</html>
