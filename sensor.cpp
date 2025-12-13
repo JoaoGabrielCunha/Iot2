@@ -6,52 +6,66 @@
 #include <Wire.h>
 #include <QMC5883LCompass.h>
 #include <esp_now.h>
+//"#include <GFButton.h>"
+
+
+// TIRE TODOS OS COMENTÁRIOS DAS VARIÁVEIS  SE CONSERVAREM COM O SLEEP MAIS  O CÓDIGO COMENTADO ENTRE ASPAS ""
+
 
 
 // Pinos (ajuste se trocar a fiação)
-const int PIN_TRIG = 4; // TRIG do sensor
-const int PIN_ECHO = 5; // ECHO via divisor de tensão
+/*RTC_DATA_ATTR*/const int PIN_TRIG = 4; // TRIG do sensor
+/*RTC_DATA_ATTR*/const int PIN_ECHO = 5; // ECHO via divisor de tensão
 
 //Pinos do sensor magnético
-const int SDA_PIN = 16;
-const int SCL_PIN = 15;
+/*RTC_DATA_ATTR*/const int SDA_PIN = 16;
+/*RTC_DATA_ATTR*/const int SCL_PIN = 15;
 
-QMC5883LCompass compass; 
+/*RTC_DATA_ATTR*/QMC5883LCompass compass; 
 
-uint8_t broadcastAddress[] = {0x24, 0xEC, 0x4A, 0x00, 0x79, 0x64}; //24:EC:4A:00:79:64
+/*RTC_DATA_ATTR*/uint8_t broadcastAddress[] = {0x24, 0xEC, 0x4A, 0x00, 0x79, 0x64}; //24:EC:4A:00:79:64
 
-typedef struct struct_message {
+/*RTC_DATA_ATTR*/typedef struct struct_message {
   bool ocupado;
 } struct_message;
 
-struct_message myData;
+/*RTC_DATA_ATTR*/struct_message myData;
 
-esp_now_peer_info_t peerInfo;
+/*RTC_DATA_ATTR*/esp_now_peer_info_t peerInfo;
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("\r\nLast Packet Send Status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
 
-HCSR04 hc(4, 5); // initialisation class HCSR04 (trig pin , echo pin)
+/*RTC_DATA_ATTR*/HCSR04 hc(4, 5); // initialisation class HCSR04 (trig pin , echo pin)
 
-unsigned long instanteAnterior = 0;
-int count_vaga_vazia = 0;
-int count_vaga_cheia = 0;
-JsonDocument dados_da_vaga;
-String dados_da_vaga_string;
-String Distancia_String;
-float Distancia_Float;
-int ID_vaga = 1;
-bool Ja_mandou_vazia = true;
-bool Ja_mandou_cheia = false;
+/*RTC_DATA_ATTR*/unsigned long instanteAnterior = 0;
+/*RTC_DATA_ATTR*/int count_vaga_vazia = 0;
+/*RTC_DATA_ATTR*/int count_vaga_cheia = 0;
+/*RTC_DATA_ATTR*/JsonDocument dados_da_vaga;
+/*RTC_DATA_ATTR*/String dados_da_vaga_string;
+/*RTC_DATA_ATTR*/String Distancia_String;
+/*RTC_DATA_ATTR*/float Distancia_Float;
+/*RTC_DATA_ATTR*/int ID_vaga = 1;
+/*RTC_DATA_ATTR*/bool Ja_mandou_vazia = true;
+/*RTC_DATA_ATTR*/bool Ja_mandou_cheia = false;
 
-bool sensor_distancia_falhou = false;
+/*RTC_DATA_ATTR*/bool sensor_distancia_falhou = false;
 
 // variáveis do campo magnético
-int bx0 = 0;
-int by0 = 0;
-int bz0 = 0;
+/*RTC_DATA_ATTR*/ int bx0 = 0;
+/*RTC_DATA_ATTR*/ int by0 = 0;
+/*RTC_DATA_ATTR*/ int bz0 = 0;
+
+/*
+"void dormir() {
+  Serial.println("Fui dormir!");
+  count++;
+  Serial.println(count);
+    rgbLedWrite(RGB_BUILTIN, 0, 0, 0);
+  esp_deep_sleep_start();
+}" */
 
 
 int modulo_inteiro(int x)
@@ -246,6 +260,9 @@ void setup()
   delay(300);
   Serial.println("Olá mundo!!!");
 
+    // Acordar em 10 segundos
+  //"esp_sleep_enable_timer_wakeup(10e6);"
+
   rgbLedWrite(RGB_BUILTIN, 0, 255, 0);
 
   WiFi.mode(WIFI_STA);
@@ -288,6 +305,17 @@ void setup()
 void loop()
 {
 
+  /* "rgbLedWrite(RGB_BUILTIN, 0, 0, 255);
+  Serial.println("Estou acordado!");
+  Serial.println("Acordei!");
+  Serial.print("Contador: ");
+ 
+  
+
+  Serial.println(count);
+ 
+  dormir();"
+    */
   unsigned long instanteAtual = millis();
   if (instanteAtual > instanteAnterior + 1000)
   {
