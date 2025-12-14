@@ -137,3 +137,9 @@ Visualização de disponibiliade e tipo de vagas.
 <p align="center">
   <img src="docs/Imagem_Dashboards.jpg" width="800">
 </p>
+
+---
+
+## 5. Video completo do projeto
+
+<iframe src="https://www.youtube.com/watch?v=u0j2lzQerH4"></iframe>
