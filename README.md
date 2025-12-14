@@ -144,7 +144,7 @@ Visualização de disponibiliade e tipo de vagas.
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=u0j2lzQerH4">
-     <img src="docs/relampago_marquinhos.png" width="600">
+     <img src="docs/thumb.png" width="600">
   </a><br>
   <b>Demonstração do sistema em funcionamento</b>
 </p>
