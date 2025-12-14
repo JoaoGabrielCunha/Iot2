@@ -143,7 +143,7 @@ Visualização de disponibiliade e tipo de vagas.
 ## 5. Video completo do projeto
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=u0j2lzQerH4">
+  <a href="https://www.youtube.com/watch?v=2XG9Db3lJXg">
      <img src="docs/thumb.png" width="600">
   </a><br>
   <b>Demonstração do sistema em funcionamento</b>
